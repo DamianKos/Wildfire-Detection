@@ -6,7 +6,9 @@ During the course of this project I will be comparing and evaluating the perform
 **How To Train**
 
 !git clone https://github.com/ultralytics/yolov5
+
 %cd yolov5
+
 %pip install -r requirements.txt
 
 
