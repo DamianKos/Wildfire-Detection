@@ -15,8 +15,8 @@ During the course of this project I will be comparing and evaluating the perform
 set KMP_DUPLICATE_LIB_OK=TRUE
 
 
-!python train.py --data (dataset location)/data.yaml --weights (choose model weights .pt file) --epochs 1
+!python train.py --data (dataset location)/data.yaml --weights (choose model weights .pt file) --epochs (choose number of epochs) --workers (set workers if needed)
 
 **How to Detect**
 
-!python detect.py --source (test file location) --weights (weights location)
+!python detect.py --source (test file location) --weights (weights location from trained model)
