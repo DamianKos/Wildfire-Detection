@@ -11,7 +11,7 @@ During the course of this project I will be comparing and evaluating the perform
 
 %pip install -r requirements.txt
 
-
+set PYTHONWARNINGS=ignore
 set KMP_DUPLICATE_LIB_OK=TRUE
 
 
