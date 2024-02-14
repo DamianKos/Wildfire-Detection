@@ -15,6 +15,7 @@ During the course of this project I will be comparing and evaluating the perform
 set KMP_DUPLICATE_LIB_OK=TRUE
 
 set PYTHONWARNINGS=ignore 
+
 Had to add ignore python warnings as i was experiencing alot of errors on screen after I installed the requirments.txt file for YOLOv7 in the same conda environment.(warnings.warn("loaded more than 1 DLL from .libs:")
 
 
