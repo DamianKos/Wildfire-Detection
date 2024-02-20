@@ -1,2 +1,4 @@
 # this drop notebooks from GitHub language stats
 *.ipynb linguist-vendored
+C:/Users/damia/Wildfire-Detection/runs filter=lfs diff=lfs merge=lfs -text
+C:/Users/damia/Wildfire-Detection/runs filter=lfs diff=lfs merge=lfs -text
