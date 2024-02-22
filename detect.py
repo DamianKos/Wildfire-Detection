@@ -34,6 +34,8 @@ import os
 import platform
 import sys
 from pathlib import Path
+from playsound import playsound
+
 
 import torch
 
@@ -97,6 +99,7 @@ def run(
     dnn=False,  # use OpenCV DNN for ONNX inference
     vid_stride=1,  # video frame-rate stride
 ):
+    alarm_played = False  # Initialize a flag to track if the alarm has been played
     source = str(source)
     save_img = not nosave and not source.endswith(".txt")  # save inference images
     is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
@@ -131,6 +134,8 @@ def run(
     # Run inference
     model.warmup(imgsz=(1 if pt or model.triton else bs, 3, *imgsz))  # warmup
     seen, windows, dt = 0, [], (Profile(device=device), Profile(device=device), Profile(device=device))
+
+    
     for path, im, im0s, vid_cap, s in dataset:
         with dt[0]:
             im = torch.from_numpy(im).to(model.device)
@@ -140,6 +145,9 @@ def run(
                 im = im[None]  # expand for batch dim
             if model.xml and im.shape[0] > 1:
                 ims = torch.chunk(im, im.shape[0], 0)
+
+        # Initialize variable to track fire or smoke detection
+        fire_or_smoke_detected = False
 
         # Inference
         with dt[1]:
@@ -176,11 +184,25 @@ def run(
         # Process predictions
         for i, det in enumerate(pred):  # per image
             seen += 1
+
+            for *xyxy, conf, cls in reversed(det):
+                if names[int(cls)] in ['fire', 'smoke'] and conf > 0.5:
+                    if not alarm_played:
+                        try:
+                            playsound('C:/Users/damia/yolov5/alarm.mp3')
+                            print("Alarm sound played successfully.")
+                            alarm_played = True  # Prevent further alarm playback
+                        except Exception as e:
+                            print(f"Error playing sound: {e}")
+                    break  # Since alarm played, no need to check further detections in this image
+
             if webcam:  # batch_size >= 1
                 p, im0, frame = path[i], im0s[i].copy(), dataset.count
                 s += f"{i}: "
             else:
                 p, im0, frame = path, im0s.copy(), getattr(dataset, "frame", 0)
+
+
 
             p = Path(p)  # to Path
             save_path = str(save_dir / p.name)  # im.jpg
@@ -193,6 +215,9 @@ def run(
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
 
+        
+               
+        
                 # Print results
                 for c in det[:, 5].unique():
                     n = (det[:, 5] == c).sum()  # detections per class
@@ -220,6 +245,8 @@ def run(
                         annotator.box_label(xyxy, label, color=colors(c, True))
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / "crops" / names[c] / f"{p.stem}.jpg", BGR=True)
+
+                
 
             # Stream results
             im0 = annotator.result()
@@ -253,6 +280,7 @@ def run(
         # Print time (inference-only)
         LOGGER.info(f"{s}{'' if len(det) else '(no detections), '}{dt[1].dt * 1E3:.1f}ms")
 
+   
     # Print results
     t = tuple(x.t / seen * 1e3 for x in dt)  # speeds per image
     LOGGER.info(f"Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {(1, 3, *imgsz)}" % t)
@@ -307,3 +335,8 @@ def main(opt):
 if __name__ == "__main__":
     opt = parse_opt()
     main(opt)
+
+
+
+
+
