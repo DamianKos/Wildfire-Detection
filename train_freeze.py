@@ -214,6 +214,11 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
     hyp["weight_decay"] *= batch_size * accumulate / nbs  # scale weight_decay
     optimizer = smart_optimizer(model, opt.optimizer, hyp["lr0"], hyp["momentum"], hyp["weight_decay"])
 
+    # Add 'initial_lr' to each parameter group in the optimizer
+    #for param_group in optimizer.param_groups:
+        #param_group['initial_lr'] = hyp["lr0"]
+
+
     # Scheduler
     if opt.cos_lr:
         lf = one_cycle(1, hyp["lrf"], epochs)  # cosine 1->hyp['lrf']
@@ -326,31 +331,49 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
         f'Starting training for {epochs} epochs...'
     )
 
-    # Code to add before the training loop for gradual unfreezing
-    unfreeze_layers_step = 1  # Number of layers to unfreeze after each epoch
-    total_freeze_layers = len(freeze)  # Total layers specified to be frozen initially
-
-    # Modify the training loop to include gradual unfreezing logic
-    for epoch in range(start_epoch, epochs):
-        if epoch > 0:  # Start unfreezing after the first epoch
-            current_unfreeze_layers = min(total_freeze_layers, unfreeze_layers_step * epoch)
-            for i, (name, param) in enumerate(model.named_parameters()):
-                # Freeze or unfreeze layers based on their names and the current epoch
-                if any(f"model.{layer}." in name for layer in range(current_unfreeze_layers)):
-                    param.requires_grad = True  # Unfreeze layer
-                LOGGER.info(f"Epoch {epoch}: Unfreezing layer {name}")  # Log unfreezing action
-
-
+   
+    # Initialize a variable to track the number of layers to unfreeze
+    total_layers = len(list(model.named_parameters()))
+    layers_to_unfreeze = 0
 
     for epoch in range(start_epoch, epochs):  # epoch ------------------------------------------------------------------
         callbacks.run("on_train_epoch_start")
         model.train()
+
+
+        # Gradually increase the number of layers to unfreeze
+        layers_to_unfreeze = min(layers_to_unfreeze + 1, total_layers)
+        unfrozen_count = 0
+
+        # Log which epoch and how many layers are unfrozen
+        print(f"Epoch {epoch}: Unfreezing {layers_to_unfreeze} layers.")
+
+        for name , param in model.named_parameters():
+            # This condition checks if we've reached the number of layers we want to unfreeze
+            if unfrozen_count < layers_to_unfreeze:
+                param.requires_grad = True  # Unfreeze the layer
+                unfrozen_count += 1
+                print(f"Unfreezing layer: {name}")  # Print the name of the layer being unfrozen
+
+            else:
+                param.requires_grad = False  # Keep remaining layers frozen
+
+       
+
+        # IMPORTANT: Update the optimizer to optimize only unfrozen parameters
+        #optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=0.001)
+
+
+       
+
 
         # Update image weights (optional, single-GPU only)
         if opt.image_weights:
             cw = model.class_weights.cpu().numpy() * (1 - maps) ** 2 / nc  # class weights
             iw = labels_to_image_weights(dataset.labels, nc=nc, class_weights=cw)  # image weights
             dataset.indices = random.choices(range(dataset.n), weights=iw, k=dataset.n)  # rand weighted idx
+
+
 
         # Update mosaic border (optional)
         # b = int(random.uniform(0.25 * imgsz, 0.75 * imgsz + gs) // gs * gs)
