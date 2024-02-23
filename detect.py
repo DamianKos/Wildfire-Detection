@@ -146,8 +146,7 @@ def run(
             if model.xml and im.shape[0] > 1:
                 ims = torch.chunk(im, im.shape[0], 0)
 
-        # Initialize variable to track fire or smoke detection
-        fire_or_smoke_detected = False
+        
 
         # Inference
         with dt[1]:
