@@ -1,0 +1,13 @@
+names:
+- fire
+- smoke
+nc: 2
+roboflow:
+  license: CC BY 4.0
+  project: wildfire-v2
+  url: https://universe.roboflow.com/atlantic-technological-university/wildfire-v2/dataset/5
+  version: 5
+  workspace: atlantic-technological-university
+test: ../test/images
+train: Wildfire-V2-5/train/images
+val: Wildfire-V2-5/valid/images
