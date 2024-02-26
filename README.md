@@ -36,7 +36,7 @@ To train a YOLO model with your dataset, use the following command template. Rep
 **python train.py --data (dataset location)/data.yaml --weights (choose model weights .pt file) --epochs (choose number of epochs) --workers (set workers if needed)**
 
 
-runs/: Ou![40epoch_yolov5s](https://github.com/DamianKos/Wildfire-Detection/assets/118854797/4f5ed328-abf0-45c0-b19e-16b37872d228)
+[40epoch_yolov5s](https://github.com/DamianKos/Wildfire-Detection/assets/118854797/4f5ed328-abf0-45c0-b19e-16b37872d228)
 
 
 ## How to Detect
