@@ -51,7 +51,7 @@ After training your model, you can perform detection on new images or videos by 
 ![Screenshot 2024-02-26 215134](https://github.com/DamianKos/Wildfire-Detection/assets/118854797/82308537-bdb7-43b2-b240-bd60ff53d9f1)
 
 
-**Project Structure**
+## Project Structure
 
 * yolov5/: YOLOv5 repository cloned from Ultralytics.
 
@@ -63,7 +63,7 @@ After training your model, you can perform detection on new images or videos by 
 
 * runs/: Output directory for training sessions and detection results.
 
-**Freezing Layers**
+## Freezing Layers
 
 Freezing layers is a technique used to prevent certain layers of a neural network from being updated during training. 
 
