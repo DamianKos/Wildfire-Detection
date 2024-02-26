@@ -5,6 +5,7 @@ YOLO  is a state-of-the-art, real-time object detection system that is known for
 **Getting started**
 
 Python 3.8 or later
+
 Conda environment
 
 To get started with YOLOv5, clone the official repository and install the required dependencies.
