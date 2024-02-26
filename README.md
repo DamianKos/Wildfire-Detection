@@ -3,6 +3,7 @@ I am currently working on my final year project where I am using Computer Vision
 YOLO  is a state-of-the-art, real-time object detection system that is known for its speed and accuracy. It divides images into a grid system and predicts bounding boxes and probabilities for each grid cell. The versions used in this project, YOLOv5, YOLOv6, and YOLOv7, represent advancements in architecture, speed, and accuracy, making them ideal for real-world applications like wildfire detection.
 
 **Getting started**
+
 Python 3.8 or later
 Conda environment
 
@@ -15,11 +16,13 @@ To get started with YOLOv5, clone the official repository and install the requir
 %pip install -r requirements.txt
 
 
-Due to library conflicts after installing YOLOv7 dependencies in the same environment, additional environment variables are set to prevent errors. .(warnings.warn("loaded more than 1 DLL from .libs:")
+Due to library conflicts after installing YOLOv7 dependencies in the same environment, additional environment variables are set to prevent errors. 
+(warnings.warn("loaded more than 1 DLL from .libs:")
 
-set PYTHONWARNINGS=ignore 
+set PYTHONWARNINGS=ignore # Ignore Python DLL conflict warnings
 
-set KMP_DUPLICATE_LIB_OK=TRUE 
+set KMP_DUPLICATE_LIB_OK=TRUE # Resolve OpenMP library conflict
+
 ![KMP Error](https://github.com/DamianKos/Wildfire-Detection/assets/118854797/0cdda828-a84d-41d6-9051-badb4807d86e)
 
 
@@ -29,7 +32,7 @@ set KMP_DUPLICATE_LIB_OK=TRUE
 
 To train a YOLO model with your dataset, use the following command template. Replace placeholders with your specific dataset location, chosen model weights file, desired number of epochs, and number of workers if necessary.
 
-python train.py --data <dataset location>/data.yaml --weights <choose model weights .pt file> --epochs <choose number of epochs> --workers <set workers if needed>
+python train.py --data (dataset location)/data.yaml --weights (choose model weights .pt file) --epochs (choose number of epochs) --workers (set workers if needed)
 
 
 runs/: Ou![40epoch_yolov5s](https://github.com/DamianKos/Wildfire-Detection/assets/118854797/4f5ed328-abf0-45c0-b19e-16b37872d228)
@@ -39,7 +42,7 @@ runs/: Ou![40epoch_yolov5s](https://github.com/DamianKos/Wildfire-Detection/asse
 
 After training your model, you can perform detection on new images or videos by using the trained weights as follows
 
-python detect.py --source <test file location> --weights <weights location from trained model>
+python detect.py --source (test file location) --weights (weights location from trained model)
 
 
 ![detect eg](https://github.com/DamianKos/Wildfire-Detection/assets/118854797/6bb021e0-17a1-44aa-b4e6-71ebf0c5e77f)
@@ -65,6 +68,6 @@ Freezing layers is a technique used to prevent certain layers of a neural networ
 
 When training your model, you can specify which layers to freeze by using the --freeze command followed by the layer indices. 
 
-python train.py --data <dataset location>/data.yaml --weights <model weights .pt file> --epochs <number of epochs> --freeze 0-8
+python train.py --data (dataset location)/data.yaml --weights (model weights .pt file) --epochs (number of epochs) --freeze 0-8
 
 ![freezing backbone](https://github.com/DamianKos/Wildfire-Detection/assets/118854797/e9a1747a-a585-4bf4-b8e1-5ea19f505a44)
