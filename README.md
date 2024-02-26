@@ -57,7 +57,7 @@ After training your model, you can perform detection on new images or videos by 
 
 * yolov7/: Directory for YOLOv7-specific files and weights (setup similar to YOLOv5).
 
-* data/: Contains datasets, including images and annotations for training and testing.
+* Wildfire-V2-5/: Contains datasets, including images and annotations for training and testing.
 
 * models/: Custom model configuration files for YOLOv5, YOLOv6, and YOLOv7.
 
