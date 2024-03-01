@@ -1,0 +1,7 @@
+names:
+- fire
+- smoke
+nc: 2
+test: Wildfire-V2-5/images/test
+train: Wildfire-V2-5/images/train
+val: Wildfire-V2-5/images/valid
