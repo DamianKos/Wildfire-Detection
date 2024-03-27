@@ -183,18 +183,6 @@ def run(
         # Process predictions
         for i, det in enumerate(pred):  # per image
             seen += 1
-
-            for *xyxy, conf, cls in reversed(det):
-                if names[int(cls)] in ['fire', 'smoke'] and conf > 0.5:
-                    if not alarm_played:
-                        try:
-                            playsound('C:/Users/damia/yolov5/alarm.mp3')
-                            print("Alarm sound played successfully.")
-                            alarm_played = True  # Prevent further alarm playback
-                        except Exception as e:
-                            print(f"Error playing sound: {e}")
-                    break  # Since alarm played, no need to check further detections in this image
-
             if webcam:  # batch_size >= 1
                 p, im0, frame = path[i], im0s[i].copy(), dataset.count
                 s += f"{i}: "
